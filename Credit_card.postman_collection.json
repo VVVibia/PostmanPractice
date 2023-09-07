@@ -1,0 +1,885 @@
+{
+	"info": {
+		"_postman_id": "1ab0a530-be73-46af-bf6a-2b26ffba6179",
+		"name": "Credit_card",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24518073",
+		"_collection_link": "https://planetary-trinity-548005.postman.co/workspace/SHIFT-practice~4c5f96b1-b8c3-4ade-bfdc-e280f8398e92/collection/24518073-1ab0a530-be73-46af-bf6a-2b26ffba6179?action=share&source=collection_link&creator=24518073"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Обновить информацию о текущем пользователе",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"Иванов Иван Иванович\",\r\n  \"income\": {{income}},\r\n  \"another_loans\": false,\r\n  \"birth_date\": \"1990-04-24\",\r\n  \"sex\": \"male\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Приложить фотографию документа для проверки",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/79652/Desktop/паспорт.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/user/document",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"document"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Приложить фотографию лица для проверки",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/79652/Desktop/фото.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/user/face",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"face"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Регистрация пользователя",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"vvv@example.com\",\r\n  \"password\": \"mypassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получить информацию о текущем пользователе",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var income = Number(pm.collectionVariables.get(\"income\"));\r",
+									"\r",
+									"pm.test(\"Income value as expected\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.income).to.eql(income);\r",
+									"});\r",
+									"\r",
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>Full Name</th>\r",
+									"        <th>Income</th>\r",
+									"        <th>Has Another Loans</th>\r",
+									"        <th>Birth Date</th>\r",
+									"        <th>Sex</th>\r",
+									"        <th>Email</th>\r",
+									"        <th>Has Status Document</th>\r",
+									"        <th>Has Face Status</th>\r",
+									"    </tr>\r",
+									"    \r",
+									"    <tr>\r",
+									"        <td>{{response.full_name}}</td>\r",
+									"        <td>{{response.income}}</td>\r",
+									"        <td>{{response.another_loans}}</td>\r",
+									"        <td>{{response.birth_date}}</td>\r",
+									"        <td>{{response.sex}}</td>\r",
+									"        <td>{{response.email}}</td>\r",
+									"        <td>{{response.status_document}}</td>\r",
+									"        <td>{{response.status_face}}</td>\r",
+									"    </tr>\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return { response: pm.response.json() }\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Получение токена авторизации",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/access_token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"access_token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "card",
+			"item": [
+				{
+					"name": "Завести новую кредитную карту Copy 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.limit).to.eql(2000000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/new?limit=2000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"new"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2000000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получить информацию о текущей карте",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Увеличить лимит по текущей карте",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.limit).to.eql(3000000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/increase_limit?limit=3000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"increase_limit"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3000000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Закрыть текущую карту",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/close",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"close"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "test_script",
+			"item": [
+				{
+					"name": "Регистрация пользователя Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{user}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получить информацию о текущей карте Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Message that card doesn't exist.\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.detail).to.eql(\"Карты нет, сначала надо открыть.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Обновить информацию о текущем пользователе",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"full_name\": \"{{full_name}}\",\r\n  \"income\": {{income}},\r\n  \"another_loans\": {{another_loans}},\r\n  \"birth_date\": \"{{birth_date}}\",\r\n  \"sex\": \"{{sex}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Завести новую кредитную карту Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Limit is equal to the selected one\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var expectedValue = Number(pm.variables.get('standart_limit'));\r",
+									"    pm.expect(jsonData.limit).to.eql(expectedValue);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var data = pm.response.json();\r",
+									"\r",
+									"var schema = {\r",
+									"    \"type\":\"object\",\r",
+									"    \"properties\":{\r",
+									"    \"limit\":{\r",
+									"            \"type\":\"integer\"\r",
+									"        },\r",
+									"    \"balance\":{\r",
+									"            \"type\":\"integer\"\r",
+									"        },\r",
+									"    \"active\":{\r",
+									"            \"type\":\"boolean\"\r",
+									"        },\r",
+									"\"exp_date\":{\r",
+									"            \"type\":\"string\"\r",
+									"        }\r",
+									"  },\r",
+									"    \"required\":[\"limit\",\"balance\",\"active\",\"exp_date\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    pm.expect(tv4.validate(data, schema)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/new?limit={{standart_limit}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"new"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "{{standart_limit}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Увеличить лимит по текущей карте Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Limit is equal to the selected one\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var expectedValue = Number(pm.variables.get('increase_limit'));\r",
+									"    pm.expect(jsonData.limit).to.eql(expectedValue);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var data = pm.response.json();\r",
+									"\r",
+									"var schema = {\r",
+									"    \"type\":\"object\",\r",
+									"    \"properties\":{\r",
+									"    \"limit\":{\r",
+									"            \"type\":\"integer\"\r",
+									"        },\r",
+									"    \"balance\":{\r",
+									"            \"type\":\"integer\"\r",
+									"        },\r",
+									"    \"active\":{\r",
+									"            \"type\":\"boolean\"\r",
+									"        },\r",
+									"\"exp_date\":{\r",
+									"            \"type\":\"string\"\r",
+									"        }\r",
+									"  },\r",
+									"    \"required\":[\"limit\",\"balance\",\"active\",\"exp_date\"]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    pm.expect(tv4.validate(data, schema)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/increase_limit?limit={{increase_limit}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"increase_limit"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "{{increase_limit}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Попытка добавления второй карты Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Message that card already exists.\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.detail).to.eql(\"У пользователя уже есть кредитная карта.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/new?limit=2000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"new"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2000000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Закрыть текущую карту Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Confirmation that the card is closed.\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.detail).to.eql(\"closed\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/credit_card/close",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"credit_card",
+								"close"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var auth_url = `${pm.environment.get('base_url')}:${pm.environment.get('port')}/auth/access_token`",
+					"",
+					"const sendRequest = (urlencoded) => {",
+					"    const request = {",
+					"        url: auth_url,",
+					"        method: 'POST',",
+					"        header: {",
+					"            'content-type':'application/x-www-form-urlencoded'",
+					"        },",
+					"        body: { mode: 'urlencoded', urlencoded }",
+					"    };",
+					"    pm.sendRequest(request, (err, res) => {",
+					"        const access_token = res.json().access_token;",
+					"        pm.environment.set('auth_token', access_token)",
+					"    });",
+					"}    ",
+					"",
+					" ",
+					"const sendLoginRequest = () => {",
+					"    console.log('Send login request');",
+					"    if (pm.iterationData.has('income')) {",
+					"        sendRequest([",
+					"            { key: 'username', value: pm.iterationData.get('user')},",
+					"            { key: 'password', value: pm.iterationData.get('password')},",
+					"        ]);",
+					"    }",
+					"    else {",
+					"         sendRequest([",
+					"            { key: 'username', value: pm.collectionVariables.get('user')},",
+					"            { key: 'password', value: pm.collectionVariables.get('password')},",
+					"        ]);",
+					"    }",
+					"}",
+					"",
+					"sendLoginRequest()"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "income",
+			"value": "10000000",
+			"type": "string"
+		},
+		{
+			"key": "user",
+			"value": "fgh@example.com",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "qwerty",
+			"type": "string"
+		},
+		{
+			"key": "birth_date",
+			"value": "2000-04-24",
+			"type": "string"
+		},
+		{
+			"key": "sex",
+			"value": "male",
+			"type": "string"
+		},
+		{
+			"key": "full_name",
+			"value": "Васильев Василий Васильевич",
+			"type": "string"
+		},
+		{
+			"key": "another_loans",
+			"value": "false",
+			"type": "string"
+		},
+		{
+			"key": "standart_limit",
+			"value": "2000000",
+			"type": "string"
+		},
+		{
+			"key": "increase_limit",
+			"value": "4000000",
+			"type": "string"
+		}
+	]
+}
