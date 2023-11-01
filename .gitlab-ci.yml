@@ -1,0 +1,57 @@
+stages:
+  - lint
+  - test
+
+Linting:
+  stage: lint
+  image: python:3.10-slim
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl -sSL https://install.python-poetry.org | python3 - --version 1.1.14
+    - export PATH="/root/.local/bin:$PATH"
+    - poetry config virtualenvs.create false
+    - poetry install -E lint --no-dev
+  script:
+    - flake8 --config=setup.cfg src
+  only:
+    changes:
+      - src/**/*
+      - pyproject.toml
+      - setup.cfg
+      - ..gitlab-ci.yml
+  allow_failure: false
+
+Tests:
+  stage: test
+  image: python:3.10-slim
+  services:  
+    - postgres
+  variables:
+    FF_NETWORK_PER_BUILD: 1
+    POSTGRES_USER: "admin"
+    POSTGRES_PASSWORD: "password"
+    POSTGRES_DB: "credit_card"
+    POSTGRES_HOST: "postgres"
+    CC_POSTGRES__USER: "$POSTGRES_USER"
+    CC_POSTGRES__PASSWORD: "$POSTGRES_PASSWORD"
+    CC_POSTGRES__DB_NAME: "$POSTGRES_DB"
+    CC_POSTGRES__HOST: "$POSTGRES_HOST"
+    POSTGRES_HOST_AUTH_METHOD: trust
+  before_script:
+    - apt-get update && apt-get install -y curl
+    - curl -sSL https://install.python-poetry.org | python3 - --version 1.1.14
+    - export PATH="/root/.local/bin:$PATH"
+    - poetry config virtualenvs.create false
+    - poetry install -E tests -E migrations --no-dev
+    - cd src/
+    - alembic upgrade heads
+    - cd ..
+  script:
+    - export PYTHONPATH="$PWD/src:$PYTHONPATH"
+    - pytest src/tests/
+  only:
+    changes:
+      - src/**/*
+      - poetry.lock
+      - ..gitlab-ci.yml
+  allow_failure: false

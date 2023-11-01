@@ -1,0 +1,43 @@
+service:
+  name: credit_card
+  version: 0.1.0
+  port: 8000
+logging:
+  version: 1
+  loggers:
+    multipart:
+      level: ERROR
+    passlib:
+      level: ERROR
+  formatters:
+    console-formatter:
+      # Для удобства переключения формата
+      class: 'app.system.mdw_logging.moneytransfer.Formatter'
+      #      format: '%(asctime)s.%(msecs)03d  %(levelname)-8s %(name)-15s %(funcName)-30s %(message)s'
+      datefmt: '%H:%M:%S'
+  handlers:
+    console:
+      class: 'logging.StreamHandler'
+      level: 'DEBUG'
+      stream: 'ext://sys.stdout'
+      formatter: 'console-formatter'
+  root:
+    level: 'DEBUG'
+    handlers:
+      - 'console'
+  disable_existing_loggers: false
+postgres:
+  user: admin
+  password: password
+  host: localhost
+  port: 5432
+  db_name: credit_card
+jwt:
+  secret: '9bcdfd1db56f80398af463fe7b4e730fe337be6bde875bbaffea25bb1400da8'
+  access_token_expire_minutes: 600
+credit_card:
+  exp_date_in_years: 2
+  default_limit: 2000000
+photo_service:
+  url: http://127.0.0.1:8001
+  timeout: 2

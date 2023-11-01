@@ -1,0 +1,33 @@
+default_stages: [commit]
+fail_fast: true
+
+repos:
+  - repo: local
+    hooks:
+      - id: lint
+        name: flake-linter
+        description: Flake8 linter
+        entry: flake8
+        require_serial: true
+        additional_dependencies: ['wemake-python-styleguide==0.18.0']
+        language: python
+        files: ^src/
+        args: ['--config=setup.cfg']
+        always_run: true
+        stages: [commit]
+      - id: isort
+        name: imports-sort
+        description: Plugin for sorting imports in python modules intended for IDE integration
+        entry: isort
+        require_serial: true
+        additional_dependencies: ['isort==5.12.0']
+        args: [--settings-path, setup.cfg]
+        language: python
+        stages: [commit]
+        exclude: ./tests,
+          ./src/app/core,
+          ./src/app/geo/normalization/core/normalization_methods.py,
+          ./src/app/geo/normalization/core/normalization_pipeline.py
+          ^./src/app/utils/,
+          ./src/migrations,
+          ./src/tools,
